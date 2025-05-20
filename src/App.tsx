@@ -8,7 +8,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Scanner from "./pages/Scanner";
-import PetDetails from "./pages/PetDetails";
+import PatientDetails from "./pages/PatientDetails";
+import PetDetails from "./pages/PetDetails"; // Keeping for backward compatibility
 import AppointmentPage from "./pages/AppointmentPage";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -28,7 +29,8 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/scanner" element={<Scanner />} />
-              <Route path="/pet/:id" element={<PetDetails />} />
+              <Route path="/patient/:id" element={<PatientDetails />} />
+              <Route path="/pet/:id" element={<PetDetails />} /> {/* Keep for backward compatibility */}
               <Route path="/appointments" element={<AppointmentPage />} />
               <Route path="/my-appointments" element={<AppointmentPage />} />
               <Route path="/settings" element={<Settings />} />
