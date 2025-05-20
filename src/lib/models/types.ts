@@ -1,4 +1,3 @@
-
 // Type definitions for the application
 
 export interface Patient {
@@ -22,13 +21,31 @@ export interface Patient {
   profileImg: string;
 }
 
+// Keep for backward compatibility until full refactoring
+export interface Pet {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  weight: number;
+  ownerName: string;
+  ownerContact: string;
+  lastVisit: string;
+  profileImg: string;
+  medicalRecords: MedicalRecord[];
+  vaccineRecords: VaccineRecord[];
+  notes: Note[];
+  qrCode: string;
+}
+
 export interface MedicalRecord {
   id: string;
   date: string;
   description: string;
   treatment: string;
   medication: string;
-  physician: string;
+  physician: string; // Changed from veterinarian
   followUp?: string;
   imageUrl?: string; // URL for uploaded images (X-rays, etc.)
 }
@@ -40,7 +57,7 @@ export interface VaccineRecord {
   manufacturer: string;
   lotNumber: string;
   expirationDate: string;
-  administeredBy: string;
+  administeredBy: string; // Changed from veterinarian
   nextDueDate: string;
 }
 
@@ -66,7 +83,7 @@ export interface DashboardStatistics {
   appointmentsToday: number;
   newPatientsThisWeek: number;
   pendingForms: number;
-  totalPatients: number;
+  totalPatients: number; // Renamed from totalPets
   recentActivityLog: ActivityLogItem[];
 }
 

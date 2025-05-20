@@ -4,6 +4,9 @@
 
 export * from './models/types';
 export * from './data/mockPets';
+export * from './data/mockPatients';
 export * from './data/mockAuth';
 export * from './data/mockDashboard';
 export * from './utils/petUtils';
+export * from './utils/patientUtils';
+
