@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Dog, LogIn } from 'lucide-react';
+import { LogIn, FileUpload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { mockCredentials } from '@/lib/data/mockAuth';
 
@@ -34,8 +34,8 @@ const LoginForm = () => {
       localStorage.setItem('userRole', user.role);
       
       const welcomeMessage = user.role === 'veterinary' 
-        ? 'Welcome to PetCare Clinic CRM' 
-        : 'Welcome to PetCare Owner Portal';
+        ? 'Welcome to MedIQ Clinical Management System' 
+        : 'Welcome to MedIQ Patient Portal';
       
       toast({
         title: "Login successful",
@@ -55,12 +55,12 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg border-t-4 border-t-vet-blue">
+    <Card className="w-full max-w-md mx-auto shadow-lg border-t-4 border-t-blue-600">
       <CardHeader className="space-y-1 flex flex-col items-center">
-        <div className="p-2 rounded-full bg-vet-light flex items-center justify-center mb-2">
-          <Dog className="h-8 w-8 text-vet-blue" />
+        <div className="p-2 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+          <FileUpload className="h-8 w-8 text-blue-600" />
         </div>
-        <CardTitle className="text-2xl font-bold text-center">PetCare Clinic Portal</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">MedIQ Portal</CardTitle>
         <CardDescription className="text-center">Enter your credentials to access the system</CardDescription>
       </CardHeader>
       <CardContent>
@@ -70,7 +70,7 @@ const LoginForm = () => {
             <Input
               id="username"
               type="email"
-              placeholder="demo@vetclinic.com or john@example.com"
+              placeholder="doctor@mediq.com or patient@example.com"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -79,7 +79,7 @@ const LoginForm = () => {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="password">Password</Label>
-              <a href="#" className="text-sm text-vet-blue hover:underline">Forgot password?</a>
+              <a href="#" className="text-sm text-blue-600 hover:underline">Forgot password?</a>
             </div>
             <Input
               id="password"
@@ -92,7 +92,7 @@ const LoginForm = () => {
           </div>
           <Button 
             type="submit" 
-            className="w-full vet-gradient hover:opacity-90 transition-opacity"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition-colors"
             disabled={loading}
           >
             {loading ? (
@@ -111,10 +111,10 @@ const LoginForm = () => {
       </CardContent>
       <CardFooter className="flex flex-col justify-center space-y-2">
         <p className="text-sm text-muted-foreground">
-          <strong>Veterinary staff:</strong> demo@vetclinic.com / password123
+          <strong>Medical Staff:</strong> doctor@mediq.com / password123
         </p>
         <p className="text-sm text-muted-foreground">
-          <strong>Pet owner:</strong> john@example.com / owner123
+          <strong>Patient:</strong> patient@example.com / patient123
         </p>
       </CardFooter>
     </Card>

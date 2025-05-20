@@ -1,12 +1,12 @@
 
 {
-  "name": "PetPass Ph",
-  "short_name": "PetPass",
-  "description": "Veterinary clinic management system for pet records",
+  "name": "MedIQ Clinical System",
+  "short_name": "MedIQ",
+  "description": "Medical clinic management system for patient records",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "theme_color": "#1e40af",
   "icons": [
     {
       "src": "/pwa-192x192.png",

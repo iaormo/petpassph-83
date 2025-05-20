@@ -15,12 +15,12 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tl from-vet-light to-white p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tl from-blue-100 to-white p-4">
       <div className="w-full max-w-md">
         <LoginForm />
         <div className="mt-8 text-center text-sm text-muted-foreground">
-          <p>PetCare Veterinary Clinic CRM</p>
-          <p>© 2025 PetCare Clinic Systems</p>
+          <p>MedIQ Clinical Management System</p>
+          <p>© 2025 MedIQ Health Technologies</p>
         </div>
       </div>
     </div>

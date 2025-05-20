@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Scanner from "./pages/Scanner";
 import PetDetails from "./pages/PetDetails";
+import AppointmentPage from "./pages/AppointmentPage";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -27,6 +28,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/scanner" element={<Scanner />} />
               <Route path="/pet/:id" element={<PetDetails />} />
+              <Route path="/appointments" element={<AppointmentPage />} />
+              <Route path="/my-appointments" element={<AppointmentPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
