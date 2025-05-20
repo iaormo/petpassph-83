@@ -1,23 +1,27 @@
 
 import { Credentials } from "../models/types";
 
-// Mock credentials for demo purposes
+// Hardcoded credentials for demo purposes only
 export const mockCredentials: Credentials[] = [
   {
-    username: "demo@vetclinic.com",
+    username: "doctor@mediq.com",
     password: "password123",
-    role: "veterinary"
+    role: "physician", // Changed from "veterinary" to "physician"
   },
   {
-    username: "john@example.com",
-    password: "owner123",
-    role: "owner",
-    petsOwned: ["p001"] // John owns Max (p001)
+    username: "patient@example.com",
+    password: "patient123",
+    role: "patient",
+    petsOwned: ["p001", "p004"] // These will be patient IDs
   },
   {
-    username: "sarah@example.com",
-    password: "owner123",
-    role: "owner",
-    petsOwned: ["p002"] // Sarah owns Bella (p002)
+    username: "nurse@mediq.com",
+    password: "nurse123",
+    role: "nurse",
+  },
+  {
+    username: "admin@mediq.com",
+    password: "admin123",
+    role: "admin",
   }
 ];

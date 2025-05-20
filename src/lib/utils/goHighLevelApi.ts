@@ -1,187 +1,173 @@
 
-/**
- * Utility functions for interacting with the Go High Level API
- */
+// Go High Level API integration
+// Documentation: https://highlevel.stoplight.io/docs/integrations/
 
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IldWVWxlZXJLbkN4NFlvZU9hWFg2IiwiY29tcGFueV9pZCI6IlI4cVFpaTZkdGV0RzJ5ZWNWS0I2IiwidmVyc2lvbiI6MSwiaWF0IjoxNzA1NjI1MDAxNDkzLCJzdWIiOiIwbms0QWRFSmZTcVB5WTQ1MlhuZiJ9.W61WaFzAjtiuvBoGklK8d8zQrxMM8oUSPwtNllrZak0";
-const BASE_URL = "https://services.leadconnectorhq.com";
+interface GoHighLevelConfig {
+  apiKey: string;
+  locationId: string;
+}
 
-/**
- * Create a new contact in Go High Level
- */
-export const createContact = async (contactData: any) => {
+// API client initialization with API key
+const initializeGHLClient = (config: GoHighLevelConfig) => {
+  return {
+    baseUrl: "https://services.leadconnectorhq.com",
+    headers: {
+      Authorization: `Bearer ${config.apiKey}`,
+      "Content-Type": "application/json",
+      Version: "2021-07-28",
+      locationId: config.locationId,
+    },
+  };
+};
+
+// Contact sync functions
+export const syncContactToGHL = async (
+  contact: any,
+  config: GoHighLevelConfig
+) => {
   try {
-    const response = await fetch(`${BASE_URL}/contacts`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+    const client = initializeGHLClient(config);
+    
+    // Format the contact data according to GHL API requirements
+    const contactData = {
+      email: contact.ownerContact,
+      firstName: contact.ownerName.split(' ')[0],
+      lastName: contact.ownerName.split(' ').slice(1).join(' '),
+      phone: contact.ownerContact.includes('@') ? '' : contact.ownerContact,
+      customField: [
+        {
+          key: "pet_name",
+          value: contact.name,
+        },
+        {
+          key: "pet_species",
+          value: contact.species,
+        },
+        {
+          key: "pet_breed",
+          value: contact.breed,
+        },
+      ],
+    };
+
+    const response = await fetch(`${client.baseUrl}/contacts/upsert`, {
+      method: "POST",
+      headers: client.headers,
       body: JSON.stringify(contactData),
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create contact: ${response.status}`);
+      throw new Error(`Failed to sync contact: ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("Contact synced to GHL:", data);
+    
+    return data;
   } catch (error) {
-    console.error("Error creating contact:", error);
+    console.error("Error syncing contact to GHL:", error);
     throw error;
   }
 };
 
-/**
- * Get a contact by ID from Go High Level
- */
-export const getContact = async (contactId: string) => {
+// Appointment sync functions
+export const syncAppointmentToGHL = async (
+  appointment: any,
+  config: GoHighLevelConfig
+) => {
   try {
-    const response = await fetch(`${BASE_URL}/contacts/${contactId}`, {
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Accept': 'application/json',
-      }
-    });
+    const client = initializeGHLClient(config);
+    
+    // Format date and time for GHL calendar
+    const [year, month, day] = appointment.date.split('-');
+    const [hours, minutes] = appointment.time.split(':');
+    const startTime = new Date(year, month-1, day, hours, minutes);
+    
+    // Default appointment duration is 30 minutes
+    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+    
+    // Format the appointment data according to GHL API requirements
+    const appointmentData = {
+      title: `${appointment.type} - ${appointment.patientName}`,
+      description: appointment.notes || "No additional notes",
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+      calendarId: "medical-appointments", // This should be configured based on your GHL setup
+      contactId: appointment.contactId || "", // If available from previous contact sync
+    };
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch contact: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching contact:", error);
-    throw error;
-  }
-};
-
-/**
- * Upload a file to Go High Level
- */
-export const uploadFile = async (file: File) => {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await fetch(`${BASE_URL}/files/upload`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to upload file: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    throw error;
-  }
-};
-
-/**
- * Create an appointment in Go High Level
- */
-export const createAppointment = async (appointmentData: any) => {
-  try {
-    const response = await fetch(`${BASE_URL}/appointments`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+    const response = await fetch(`${client.baseUrl}/appointments`, {
+      method: "POST",
+      headers: client.headers,
       body: JSON.stringify(appointmentData),
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create appointment: ${response.status}`);
+      throw new Error(`Failed to sync appointment: ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("Appointment synced to GHL:", data);
+    
+    return data;
   } catch (error) {
-    console.error("Error creating appointment:", error);
+    console.error("Error syncing appointment to GHL:", error);
     throw error;
   }
 };
 
-/**
- * Get appointments for a contact
- */
-export const getContactAppointments = async (contactId: string) => {
+// Medical records sync functions
+export const syncMedicalRecordToGHL = async (
+  medicalRecord: any,
+  patientId: string,
+  config: GoHighLevelConfig
+) => {
   try {
-    const response = await fetch(`${BASE_URL}/appointments?contactId=${contactId}`, {
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Accept': 'application/json',
-      }
-    });
+    const client = initializeGHLClient(config);
+    
+    // Format the note data for GHL
+    const noteData = {
+      contactId: patientId,
+      body: `
+        <strong>Medical Record - ${medicalRecord.date}</strong>
+        <p>Description: ${medicalRecord.description}</p>
+        <p>Treatment: ${medicalRecord.treatment}</p>
+        <p>Medication: ${medicalRecord.medication}</p>
+        <p>Physician: ${medicalRecord.veterinarian}</p>
+        ${medicalRecord.followUp ? `<p>Follow-up: ${medicalRecord.followUp}</p>` : ''}
+      `,
+      type: "MEDICAL_RECORD",
+    };
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch appointments: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    throw error;
-  }
-};
-
-/**
- * Add custom field value to a contact
- */
-export const addCustomField = async (contactId: string, fieldId: string, value: any) => {
-  try {
-    const response = await fetch(`${BASE_URL}/contacts/${contactId}/custom-field`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        id: fieldId,
-        value
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to add custom field: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error adding custom field:", error);
-    throw error;
-  }
-};
-
-/**
- * Create a medical record note for a patient in Go High Level
- */
-export const createMedicalNote = async (contactId: string, noteData: any) => {
-  try {
-    const response = await fetch(`${BASE_URL}/contacts/${contactId}/notes`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+    const response = await fetch(`${client.baseUrl}/contacts/notes`, {
+      method: "POST",
+      headers: client.headers,
       body: JSON.stringify(noteData),
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create medical note: ${response.status}`);
+      throw new Error(`Failed to sync medical record: ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("Medical record synced to GHL:", data);
+    
+    return data;
   } catch (error) {
-    console.error("Error creating medical note:", error);
+    console.error("Error syncing medical record to GHL:", error);
     throw error;
   }
+};
+
+// Initialize the API with environment variables if available
+export const getGHLConfig = (): GoHighLevelConfig | null => {
+  const apiKey = localStorage.getItem('GHL_API_KEY');
+  const locationId = localStorage.getItem('GHL_LOCATION_ID');
+  
+  if (!apiKey || !locationId) {
+    console.warn('GHL API credentials not found. Some features may be limited.');
+    return null;
+  }
+  
+  return { apiKey, locationId };
 };

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Menu, X, Calendar, Clipboard, UploadCloud, FileCheck, Users, UserRound } from 'lucide-react';
+import { LogOut, Menu, X, Calendar, Clipboard, UploadCloud, FileCheck, Users, UserRound, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { mockCredentials } from '@/lib/data/mockAuth';
 
@@ -13,7 +13,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userRole, setUserRole] = useState<"doctor" | "patient">("doctor");
+  const [userRole, setUserRole] = useState<"physician" | "nurse" | "patient" | "admin">("physician");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const username = localStorage.getItem('username');
     const user = mockCredentials.find(cred => cred.username === username);
     if (user) {
-      setUserRole(user.role === "veterinary" ? "doctor" : "patient");
+      setUserRole(user.role as "physician" | "nurse" | "patient" | "admin");
     }
   }, []);
 
@@ -37,15 +37,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Define menu items based on user role
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: <Clipboard className="mr-2 h-5 w-5" /> },
-    ...(userRole === "doctor" ? [
-      { path: '/appointments', label: 'Appointments', icon: <Calendar className="mr-2 h-5 w-5" /> },
-      { path: '/patients', label: 'Patients', icon: <Users className="mr-2 h-5 w-5" /> },
-      { path: '/medical-records', label: 'Medical Records', icon: <FileCheck className="mr-2 h-5 w-5" /> },
-      { path: '/scanner', label: 'Patient Scanner', icon: <UploadCloud className="mr-2 h-5 w-5" /> }
-    ] : [
+    ...(userRole === "patient" ? [
       { path: '/my-appointments', label: 'My Appointments', icon: <Calendar className="mr-2 h-5 w-5" /> },
       { path: '/my-records', label: 'My Records', icon: <FileCheck className="mr-2 h-5 w-5" /> },
       { path: '/profile', label: 'My Profile', icon: <UserRound className="mr-2 h-5 w-5" /> }
+    ] : [
+      { path: '/appointments', label: 'Appointments', icon: <Calendar className="mr-2 h-5 w-5" /> },
+      { path: '/patients', label: 'Patients', icon: <Users className="mr-2 h-5 w-5" /> },
+      { path: '/medical-records', label: 'Medical Records', icon: <FileCheck className="mr-2 h-5 w-5" /> },
+      { path: '/scanner', label: 'Patient Scanner', icon: <UploadCloud className="mr-2 h-5 w-5" /> },
+      ...(userRole === "admin" || userRole === "physician" ? [
+        { path: '/settings', label: 'Settings', icon: <Settings className="mr-2 h-5 w-5" /> }
+      ] : [])
     ])
   ];
 

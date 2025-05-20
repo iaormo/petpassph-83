@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Scanner from "./pages/Scanner";
 import PetDetails from "./pages/PetDetails";
 import AppointmentPage from "./pages/AppointmentPage";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 // Create a client
@@ -30,6 +31,7 @@ const App = () => {
               <Route path="/pet/:id" element={<PetDetails />} />
               <Route path="/appointments" element={<AppointmentPage />} />
               <Route path="/my-appointments" element={<AppointmentPage />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { LogIn, UploadCloud } from 'lucide-react';
+import { LogIn, Stethoscope } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { mockCredentials } from '@/lib/data/mockAuth';
 
@@ -33,7 +33,7 @@ const LoginForm = () => {
       localStorage.setItem('username', user.username);
       localStorage.setItem('userRole', user.role);
       
-      const welcomeMessage = user.role === 'veterinary' 
+      const welcomeMessage = user.role === 'physician' || user.role === 'nurse' || user.role === 'admin'
         ? 'Welcome to MedIQ Clinical Management System' 
         : 'Welcome to MedIQ Patient Portal';
       
@@ -58,9 +58,9 @@ const LoginForm = () => {
     <Card className="w-full max-w-md mx-auto shadow-lg border-t-4 border-t-blue-600">
       <CardHeader className="space-y-1 flex flex-col items-center">
         <div className="p-2 rounded-full bg-blue-100 flex items-center justify-center mb-2">
-          <UploadCloud className="h-8 w-8 text-blue-600" />
+          <Stethoscope className="h-8 w-8 text-blue-600" />
         </div>
-        <CardTitle className="text-2xl font-bold text-center">MedIQ Portal</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">MedIQ Clinical Portal</CardTitle>
         <CardDescription className="text-center">Enter your credentials to access the system</CardDescription>
       </CardHeader>
       <CardContent>
