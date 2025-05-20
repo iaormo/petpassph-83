@@ -17,7 +17,7 @@ const PetDetails = () => {
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [userRole, setUserRole] = useState<"veterinary" | "owner">("veterinary");
+  const [userRole, setUserRole] = useState<"veterinary" | "owner">("owner");
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -33,10 +33,15 @@ const PetDetails = () => {
     const user = mockCredentials.find(cred => cred.username === currentUsername);
     
     if (user) {
-      setUserRole(user.role);
+      // Map roles: physician/nurse/admin -> veterinary, patient -> owner
+      if (user.role === "physician" || user.role === "nurse" || user.role === "admin") {
+        setUserRole("veterinary");
+      } else {
+        setUserRole("owner");
+      }
       
       // If user is owner, check if they own this pet
-      if (user.role === "owner") {
+      if (user.role === "patient" || user.role === "owner") {
         if (user.petsOwned && id && user.petsOwned.includes(id)) {
           setAuthorized(true);
         } else {
@@ -49,7 +54,7 @@ const PetDetails = () => {
           return;
         }
       } else {
-        // Veterinary staff has access to all pets
+        // Medical staff has access to all pets
         setAuthorized(true);
       }
     }

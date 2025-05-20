@@ -38,7 +38,7 @@ const NotesTab: React.FC<NotesTabProps> = ({ patient, setPatient, userRole }) =>
             <CardTitle>Add Note</CardTitle>
           </CardHeader>
           <CardContent>
-            <AddNoteForm patientId={patient.id} onAddNote={handleAddNote} />
+            <AddNoteForm onSubmit={handleAddNote} />
           </CardContent>
         </Card>
       )}

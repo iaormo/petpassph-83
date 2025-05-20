@@ -33,7 +33,7 @@ const VaccineRecordsTab: React.FC<VaccineRecordsTabProps> = ({ patient, setPatie
             <CardTitle>Add Vaccine Record</CardTitle>
           </CardHeader>
           <CardContent>
-            <AddVaccineRecordForm patientId={patient.id} onAddRecord={handleAddRecord} />
+            <AddVaccineRecordForm onAddRecord={handleAddRecord} />
           </CardContent>
         </Card>
       )}

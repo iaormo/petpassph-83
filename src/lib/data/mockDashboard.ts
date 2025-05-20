@@ -6,7 +6,7 @@ export const dashboardStats: DashboardStatistics = {
   appointmentsToday: 12,
   newPatientsThisWeek: 5,
   pendingForms: 3,
-  totalPets: 158,
+  totalPatients: 158,
   recentActivityLog: [
     { id: "a1", time: "9:30 AM", action: "Dr. Wilson checked in patient Max" },
     { id: "a2", time: "10:15 AM", action: "New patient registration: Luna (Maine Coon)" },

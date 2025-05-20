@@ -56,7 +56,7 @@ const MedicalRecordsTab: React.FC<MedicalRecordsTabProps> = ({ pet, setPet, user
                   Add a new medical record for {pet.name}. Fill in all the required fields.
                 </DialogDescription>
               </DialogHeader>
-              <AddMedicalRecordForm petId={pet.id} onSubmit={handleAddMedicalRecord} />
+              <AddMedicalRecordForm onSubmit={handleAddMedicalRecord} />
             </DialogContent>
           </Dialog>
         )}
@@ -101,8 +101,8 @@ const MedicalRecordCard: React.FC<MedicalRecordCardProps> = ({ record }) => {
           <dd className="mt-1">{record.medication}</dd>
         </div>
         <div>
-          <dt className="text-muted-foreground">Veterinarian</dt>
-          <dd className="mt-1">{record.veterinarian}</dd>
+          <dt className="text-muted-foreground">Physician</dt>
+          <dd className="mt-1">{record.physician}</dd>
         </div>
         {record.followUp && (
           <div className="sm:col-span-2">

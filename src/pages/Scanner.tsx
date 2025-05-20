@@ -17,11 +17,11 @@ const Scanner = () => {
       return;
     }
     
-    // Check if user role is doctor
+    // Check if user role is medical staff
     const username = localStorage.getItem('username');
     const user = mockCredentials.find(cred => cred.username === username);
     
-    if (!user || user.role !== 'veterinary') {
+    if (!user || (user.role !== 'physician' && user.role !== 'nurse' && user.role !== 'admin')) {
       // Redirect to dashboard if not medical staff
       toast({
         title: "Access Denied",

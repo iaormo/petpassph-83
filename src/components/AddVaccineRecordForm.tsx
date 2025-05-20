@@ -20,18 +20,20 @@ const formSchema = z.object({
   manufacturer: z.string().min(1, 'Manufacturer is required'),
   lotNumber: z.string().min(1, 'Lot number is required'),
   expirationDate: z.string().min(1, 'Expiration date is required'),
-  veterinarian: z.string().min(1, 'Veterinarian name is required'),
+  administeredBy: z.string().min(1, 'Administrator name is required'),
   nextDueDate: z.string().min(1, 'Next due date is required'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 interface AddVaccineRecordFormProps {
-  petId: string;
-  onSubmit: (record: VaccineRecord) => void;
+  petId?: string; // Make petId optional
+  patientId?: string; // Add patientId prop
+  onSubmit?: (record: VaccineRecord) => void;
+  onAddRecord?: (record: VaccineRecord) => void; // Support both callback names
 }
 
-const AddVaccineRecordForm: React.FC<AddVaccineRecordFormProps> = ({ petId, onSubmit }) => {
+const AddVaccineRecordForm: React.FC<AddVaccineRecordFormProps> = ({ petId, patientId, onSubmit, onAddRecord }) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,7 +41,7 @@ const AddVaccineRecordForm: React.FC<AddVaccineRecordFormProps> = ({ petId, onSu
       manufacturer: '',
       lotNumber: '',
       expirationDate: '',
-      veterinarian: '',
+      administeredBy: '',
       nextDueDate: '',
     },
   });
@@ -53,11 +55,14 @@ const AddVaccineRecordForm: React.FC<AddVaccineRecordFormProps> = ({ petId, onSu
       manufacturer: values.manufacturer,
       lotNumber: values.lotNumber,
       expirationDate: values.expirationDate,
-      veterinarian: values.veterinarian,
+      administeredBy: values.administeredBy,
       nextDueDate: values.nextDueDate,
     };
 
-    onSubmit(vaccineRecord);
+    // Call the appropriate callback
+    if (onSubmit) onSubmit(vaccineRecord);
+    if (onAddRecord) onAddRecord(vaccineRecord);
+    
     form.reset();
   };
 
@@ -140,12 +145,12 @@ const AddVaccineRecordForm: React.FC<AddVaccineRecordFormProps> = ({ petId, onSu
 
         <FormField
           control={form.control}
-          name="veterinarian"
+          name="administeredBy"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Veterinarian</FormLabel>
+              <FormLabel>Administered By</FormLabel>
               <FormControl>
-                <Input placeholder="Administering veterinarian" {...field} />
+                <Input placeholder="Administering physician or nurse" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

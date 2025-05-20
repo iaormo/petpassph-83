@@ -56,7 +56,7 @@ const VaccineRecordsTab: React.FC<VaccineRecordsTabProps> = ({ pet, setPet, user
                   Add a new vaccination record for {pet.name}. Fill in all the required fields.
                 </DialogDescription>
               </DialogHeader>
-              <AddVaccineRecordForm petId={pet.id} onSubmit={handleAddVaccineRecord} />
+              <AddVaccineRecordForm onSubmit={handleAddVaccineRecord} />
             </DialogContent>
           </Dialog>
         )}
@@ -108,8 +108,8 @@ const VaccineRecordCard: React.FC<VaccineRecordCardProps> = ({ record }) => {
           <dd className="mt-1">{new Date(record.expirationDate).toLocaleDateString()}</dd>
         </div>
         <div>
-          <dt className="text-muted-foreground">Veterinarian</dt>
-          <dd className="mt-1">{record.veterinarian}</dd>
+          <dt className="text-muted-foreground">Administered By</dt>
+          <dd className="mt-1">{record.administeredBy}</dd>
         </div>
         <div className="sm:col-span-2">
           <dt className="text-muted-foreground">Next Due Date</dt>

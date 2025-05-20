@@ -33,7 +33,7 @@ const MedicalRecordsTab: React.FC<MedicalRecordsTabProps> = ({ patient, setPatie
             <CardTitle>Add Medical Record</CardTitle>
           </CardHeader>
           <CardContent>
-            <AddMedicalRecordForm patientId={patient.id} onAddRecord={handleAddRecord} />
+            <AddMedicalRecordForm onSubmit={handleAddRecord} />
           </CardContent>
         </Card>
       )}
