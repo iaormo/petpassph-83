@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Menu, X, Calendar, Clipboard, FileUpload, FileCheck, Users, UserRound } from 'lucide-react';
+import { LogOut, Menu, X, Calendar, Clipboard, UploadCloud, FileCheck, Users, UserRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { mockCredentials } from '@/lib/data/mockAuth';
 
@@ -41,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       { path: '/appointments', label: 'Appointments', icon: <Calendar className="mr-2 h-5 w-5" /> },
       { path: '/patients', label: 'Patients', icon: <Users className="mr-2 h-5 w-5" /> },
       { path: '/medical-records', label: 'Medical Records', icon: <FileCheck className="mr-2 h-5 w-5" /> },
-      { path: '/scanner', label: 'Patient Scanner', icon: <FileUpload className="mr-2 h-5 w-5" /> }
+      { path: '/scanner', label: 'Patient Scanner', icon: <UploadCloud className="mr-2 h-5 w-5" /> }
     ] : [
       { path: '/my-appointments', label: 'My Appointments', icon: <Calendar className="mr-2 h-5 w-5" /> },
       { path: '/my-records', label: 'My Records', icon: <FileCheck className="mr-2 h-5 w-5" /> },
